@@ -1,35 +1,244 @@
-<html> 
-<head> 
-<meta http-equiv="Content-Type" content="text/html; charset=gb2312"> 
-<title>趣味网页|常见整人效果</title> 
-</head> 
-<body> 
-<a href="" onMouseover="
-alert('为什么把鼠标放到这里?'); 
-alert('我不是说过不可以这样吗？'); 
-alert('你把我的话当什么了？'); 
-alert('你知道错了吗？'); 
-alert('什么？你居然....'); 
-alert('居然还没意识到自己做错了？'); 
-alert('那好，你要为此付出代价!'); 
-alert('我要你在这里点足一千下......'); 
-alert('什么？你开始有点后悔了？'); 
-alert('何必呢？'); 
-alert('你当初干什么去了？'); 
-alert('不原谅你！'); 
-alert('好从现在开始再点995下......'); 
-alert('你的手开始累了吗?'); 
-alert('什么？你已经没力气了？'); 
-alert('你一直在求我原谅你啊！'); 
-alert('看来你是真的知道错了!'); 
-alert('下次你还会这么做吗？'); 
-alert('真的不会了？'); 
-alert('那好，今天就放你一马！'); 
-alert('写封信给我说声对不起!'); 
-alert('你能这么做我很高兴!!!'); 
-document.bgColor='black'; 
-document.fgColor='White'; 
-window.location.href='mailto:13602900003@139.com?subject=对不起,下次不敢了!';">不许把鼠标移到这里</a> 
-嘻试吧爽噢。。 
-</body> 
-</html> 
+<!DOCTYPE html>
+<html style="height: 100%">
+   <head>
+       <meta charset="utf-8">
+   </head>
+   <body style="height: 100%; margin: 0">
+       <div id="container" style="height: 100%"></div>
+       <script type="text/javascript" src="../stitic/js/jquery.min.js"></script>
+       <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-gl/echarts-gl.min.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script>
+       <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/simplex.js"></script>
+       <script type="text/javascript">
+var dom = document.getElementById("container");
+var myChart = echarts.init(dom);
+var app = {};
+option = null;
+
+myChart.showLoading();
+
+$.get('../stitic/json/shaoguan_1.json', function (data) {
+    myChart.hideLoading();
+
+    var itemStyle = {
+        normal: {
+            opacity: 0.8,
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowOffsetY: 0,
+            shadowColor: 'rgba(0, 0, 0, 0.5)'
+        }
+    };
+
+    var sizeFunction = function (x) {
+        var y = Math.sqrt(x / 500) + 0.1;
+        return y * 100;
+    };
+    // Schema:
+    var schema = [
+        {name: 'Income', index: 0, text: '故障处理历时', unit: '小时'},
+        {name: 'LifeExpectancy', index: 1, text: '平均工单响应时长', unit: '小时'},
+        {name: 'Population', index: 2, text: '归档单量', unit: '张'},
+        {name: 'Country', index: 3, text: '代维公司', unit: ''}
+    ];
+
+    option = {
+        baseOption: {
+            timeline: {
+                axisType: 'category',
+                orient: 'vertical',
+                autoPlay: true,
+                inverse: true,
+                playInterval: 2000,
+                left: null,
+                right: 0,
+                top: 20,
+                bottom: 20,
+                width: 55,
+                height: null,
+                label: {
+                    normal: {
+                        textStyle: {
+                            color: '#999'
+                        }
+                    },
+                    emphasis: {
+                        textStyle: {
+                            color: '#fff'
+                        }
+                    }
+                },
+                symbol: 'none',
+                lineStyle: {
+                    color: '#555'
+                },
+                checkpointStyle: {
+                    color: '#bbb',
+                    borderColor: '#777',
+                    borderWidth: 2
+                },
+                controlStyle: {
+                    showNextBtn: false,
+                    showPrevBtn: false,
+                    normal: {
+                        color: '#666',
+                        borderColor: '#666'
+                    },
+                    emphasis: {
+                        color: '#aaa',
+                        borderColor: '#aaa'
+                    }
+                },
+                data: []
+            },
+            backgroundColor: '#404a59',
+            title: [{
+                text: data.timeline[0],
+                textAlign: 'center',
+                left: '80%',
+                top: '66%',
+                textStyle: {
+                    fontSize: 60,
+                    color: 'rgba(255, 255, 255, 0.7)'
+                }
+            }, {
+                text: '代维单位集中故障指标演变',
+                left: 'center',
+                top: 10,
+                textStyle: {
+                    color: '#aaa',
+                    fontWeight: 'normal',
+                    fontSize: 35
+                }
+            }],
+            tooltip: {
+                padding: 5,
+                backgroundColor: '#222',
+                borderColor: '#777',
+                borderWidth: 1,
+                formatter: function (obj) {
+                    var value = obj.value;
+                    return schema[3].text + '：' + value[3] + '<br>'
+                            + schema[1].text + '：' + value[1] + schema[1].unit + '<br>'
+                            + schema[0].text + '：' + value[0] + schema[0].unit + '<br>'
+                            + schema[2].text + '：' + value[2] + '<br>';
+                }
+            },
+            grid: {
+                top: 100,
+                containLabel: true,
+                left: 30,
+                right: '110'
+            },
+            xAxis: {
+                type: 'log',
+                name: '故障处理历时',
+                max: 5,
+                min: -2,
+                nameGap: 25,
+                nameLocation: 'middle',
+                nameTextStyle: {
+                    fontSize: 18
+                },
+                splitLine: {
+                    show: false
+                },
+                axisLine: {
+                    lineStyle: {
+                        color: '#ccc'
+                    }
+                },
+                axisLabel: {
+                    formatter: '{value} 小时'
+                }
+            },
+            yAxis: {
+                type: 'value',
+                name: '平均工单响应时长',
+                max: 1,
+                nameTextStyle: {
+                    color: '#ccc',
+                    fontSize: 15
+                },
+                axisLine: {
+                    lineStyle: {
+                        color: '#ccc'
+                    }
+                },
+                splitLine: {
+                    show: false
+                },
+                axisLabel: {
+                    formatter: '{value} 小时'
+                }
+            },
+            visualMap: [
+                {
+                    show: false,
+                    dimension: 3,
+                    categories: data.counties,
+                    calculable: true,
+                    precision: 0.01,
+                    textGap: 30,
+                    textStyle: {
+                        color: '#ccc'
+                    },
+                    inRange: {
+                        color: (function () {
+                            var colors = ['red', '#000099', '#edc1a5', '#9dc5c8', '#e1e8c8', '#7b7c68', '#e5b5b5', '#f0b489', '#928ea8', '#bda29a'];
+                            return colors.concat(colors);
+                        })()
+                    }
+                }
+            ],
+            series: [
+                {
+                    type: 'scatter',
+                    itemStyle: itemStyle,
+                    data: data.series[0],
+                    symbolSize: function(val) {
+                        return sizeFunction(val[2]);
+                    }
+                }
+            ],
+            animationDurationUpdate: 1000,
+            animationEasingUpdate: 'quinticInOut'
+        },
+        options: []
+    };
+
+    for (var n = 0; n < data.timeline.length; n++) {
+        option.baseOption.timeline.data.push(data.timeline[n]);
+        option.options.push({
+            title: {
+                show: true,
+                'text': data.timeline[n] + ''
+            },
+            series: {
+                name: data.timeline[n],
+                type: 'scatter',
+                itemStyle: itemStyle,
+                data: data.series[n],
+                symbolSize: function(val) {
+                    return sizeFunction(val[2]);
+                }
+            }
+        });
+    }
+
+    myChart.setOption(option);
+
+});;
+if (option && typeof option === "object") {
+    myChart.setOption(option, true);
+}
+       </script>
+   </body>
+</html>
