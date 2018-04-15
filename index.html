@@ -1,246 +1,263 @@
 <!DOCTYPE html>
-<html style="height: 100%">
-   <head>
-       <meta charset="utf-8">
-      <meta charset="UTF-8">
-		<title>集中故障管理系统</title>
-   </head>
-   <body style="height: 100%; margin: 0">
-       <div id="container" style="height: 100%"></div>
-<!--        <script type="text/javascript" src="../stitic/js/jquery.min.js"></script> -->
-       <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
-       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
-       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-gl/echarts-gl.min.js"></script>
-       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>
-       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
-       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
-       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script>
-       <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
-       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
-       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/simplex.js"></script>
-       <script type="text/javascript">
-var dom = document.getElementById("container");
-var myChart = echarts.init(dom);
-var app = {};
-option = null;
+<html>
 
-myChart.showLoading();
+	<head>
+		<meta charset="UTF-8">
+		<title>欢迎登录</title>
 
-$.get('jizhongguzhang201803.json', function (data) {
-    myChart.hideLoading();
+		<script type="text/javascript" src="js/jquery.min.js"></script>
+		<script language=javascript>
+			setTimeout("window.location.href='bootstrap首页.html'", 12000)
+		</script>
 
-    var itemStyle = {
-        normal: {
-            opacity: 0.8,
-            shadowBlur: 10,
-            shadowOffsetX: 0,
-            shadowOffsetY: 0,
-            shadowColor: 'rgba(0, 0, 0, 0.5)'
-        }
-    };
+		<script type="text/javascript">
+			(function($) {
+				var Vector = function(x, y) {
+					this.x = x || 0;
+					this.y = y || 0;
+				};
 
-    var sizeFunction = function (x) {
-        var y = Math.sqrt(x / 500) + 0.1;
-        return y * 100;
-    };
-    // Schema:
-    var schema = [
-        {name: 'Income', index: 0, text: '故障处理历时', unit: '小时'},
-        {name: 'LifeExpectancy', index: 1, text: '平均工单响应时长', unit: '小时'},
-        {name: 'Population', index: 2, text: '归档单量', unit: '张'},
-        {name: 'Country', index: 3, text: '代维公司', unit: ''}
-    ];
+				Vector.prototype = {
+					add: function(v) {
+						this.x += v.x;
+						this.y += v.y;
+						return this;
+					},
 
-    option = {
-        baseOption: {
-            timeline: {
-                axisType: 'category',
-                orient: 'vertical',
-                autoPlay: true,
-                inverse: true,
-                playInterval: 2000,
-                left: null,
-                right: 0,
-                top: 20,
-                bottom: 20,
-                width: 55,
-                height: null,
-                label: {
-                    normal: {
-                        textStyle: {
-                            color: '#999'
-                        }
-                    },
-                    emphasis: {
-                        textStyle: {
-                            color: '#fff'
-                        }
-                    }
-                },
-                symbol: 'none',
-                lineStyle: {
-                    color: '#555'
-                },
-                checkpointStyle: {
-                    color: '#bbb',
-                    borderColor: '#777',
-                    borderWidth: 2
-                },
-                controlStyle: {
-                    showNextBtn: false,
-                    showPrevBtn: false,
-                    normal: {
-                        color: '#666',
-                        borderColor: '#666'
-                    },
-                    emphasis: {
-                        color: '#aaa',
-                        borderColor: '#aaa'
-                    }
-                },
-                data: []
-            },
-            backgroundColor: '#404a59',
-            title: [{
-                text: data.timeline[0],
-                textAlign: 'center',
-                left: '80%',
-                top: '66%',
-                textStyle: {
-                    fontSize: 60,
-                    color: 'rgba(255, 255, 255, 0.7)'
-                }
-            }, {
-                text: '代维单位集中故障指标演变',
-                left: 'center',
-                top: 10,
-                textStyle: {
-                    color: '#aaa',
-                    fontWeight: 'normal',
-                    fontSize: 35
-                }
-            }],
-            tooltip: {
-                padding: 5,
-                backgroundColor: '#222',
-                borderColor: '#777',
-                borderWidth: 1,
-                formatter: function (obj) {
-                    var value = obj.value;
-                    return schema[3].text + '：' + value[3] + '<br>'
-                            + schema[1].text + '：' + value[1] + schema[1].unit + '<br>'
-                            + schema[0].text + '：' + value[0] + schema[0].unit + '<br>'
-                            + schema[2].text + '：' + value[2] + '<br>';
-                }
-            },
-            grid: {
-                top: 100,
-                containLabel: true,
-                left: 30,
-                right: '110'
-            },
-            xAxis: {
-                type: 'log',
-                name: '故障处理历时',
-                max: 5,
-                min: -2,
-                nameGap: 25,
-                nameLocation: 'middle',
-                nameTextStyle: {
-                    fontSize: 18
-                },
-                splitLine: {
-                    show: false
-                },
-                axisLine: {
-                    lineStyle: {
-                        color: '#ccc'
-                    }
-                },
-                axisLabel: {
-                    formatter: '{value} 小时'
-                }
-            },
-            yAxis: {
-                type: 'value',
-                name: '平均工单响应时长',
-                max: 1,
-                nameTextStyle: {
-                    color: '#ccc',
-                    fontSize: 15
-                },
-                axisLine: {
-                    lineStyle: {
-                        color: '#ccc'
-                    }
-                },
-                splitLine: {
-                    show: false
-                },
-                axisLabel: {
-                    formatter: '{value} 小时'
-                }
-            },
-            visualMap: [
-                {
-                    show: false,
-                    dimension: 3,
-                    categories: data.counties,
-                    calculable: true,
-                    precision: 0.01,
-                    textGap: 30,
-                    textStyle: {
-                        color: '#ccc'
-                    },
-                    inRange: {
-                        color: (function () {
-                            var colors = ['red', '#000099', '#edc1a5', '#9dc5c8', '#e1e8c8', '#7b7c68', '#e5b5b5', '#f0b489', '#928ea8', '#bda29a'];
-                            return colors.concat(colors);
-                        })()
-                    }
-                }
-            ],
-            series: [
-                {
-                    type: 'scatter',
-                    itemStyle: itemStyle,
-                    data: data.series[0],
-                    symbolSize: function(val) {
-                        return sizeFunction(val[2]);
-                    }
-                }
-            ],
-            animationDurationUpdate: 1000,
-            animationEasingUpdate: 'quinticInOut'
-        },
-        options: []
-    };
+					length: function() {
+						return Math.sqrt(this.x * this.x + this.y * this.y);
+					},
+					rotate: function(theta) {
+						var x = this.x;
+						var y = this.y;
+						this.x = Math.cos(theta) * this.x - Math.sin(theta) * this.y;
+						this.y = Math.sin(theta) * this.x + Math.cos(theta) * this.y;
 
-    for (var n = 0; n < data.timeline.length; n++) {
-        option.baseOption.timeline.data.push(data.timeline[n]);
-        option.options.push({
-            title: {
-                show: true,
-                'text': data.timeline[n] + ''
-            },
-            series: {
-                name: data.timeline[n],
-                type: 'scatter',
-                itemStyle: itemStyle,
-                data: data.series[n],
-                symbolSize: function(val) {
-                    return sizeFunction(val[2]);
-                }
-            }
-        });
-    }
+						//this.x = Math.cos(theta) * x - Math.sin(theta) * y;
 
-    myChart.setOption(option);
+						//this.y = Math.sin(theta) * x + Math.cos(theta) * y;
 
-});;
-if (option && typeof option === "object") {
-    myChart.setOption(option, true);
-}
-       </script>
-   </body>
+						return this;
+					},
+
+					mult: function(f) {
+						this.x *= f;
+						this.y *= f;
+						return this;
+					}
+
+				};
+
+				var Leaf = function(p, r, c, ctx) {
+					this.p = p || null;
+					this.r = r || 0;
+					this.c = c || 'rgba(255,255,255,1.0)';
+					this.ctx = ctx;
+				}
+
+				Leaf.prototype = {
+					render: function() {
+						var that = this;
+						var ctx = this.ctx;
+						var f = Branch.random(1, 2)
+						for(var i = 0; i < 5; i++) {
+							(function(r) {
+								setTimeout(function() {
+									ctx.beginPath();
+									ctx.fillStyle = that.color;
+									ctx.moveTo(that.p.x, that.p.y);
+									ctx.arc(that.p.x, that.p.y, r, 0, Branch.circle, true);
+									ctx.fill();
+								}, r * 60);
+							})(i);
+						}
+					}
+				}
+
+				var Branch = function(p, v, r, c, t) {
+					this.p = p || null;
+					this.v = v || null;
+					this.r = r || 0;
+					this.length = 0;
+					this.generation = 1;
+					this.tree = t || null;
+					this.color = c || 'rgba(255,255,255,1.0)';
+					this.register();
+				};
+
+				Branch.prototype = {
+					register: function() {
+						this.tree.addBranch(this);
+					},
+
+					draw: function() {
+						var ctx = this.tree.ctx;
+						ctx.beginPath();
+						ctx.fillStyle = this.color;
+						ctx.moveTo(this.p.x, this.p.y);
+						ctx.arc(this.p.x, this.p.y, this.r, 0, Branch.circle, true);
+						ctx.fill();
+					},
+
+					modify: function() {
+						var angle = 0.18 - (0.10 / this.generation);
+						this.p.add(this.v);
+						this.length += this.v.length();
+						this.r *= 0.99;
+						this.v.rotate(Branch.random(-angle, angle)); //.mult(0.996);
+						if(this.r < 0.8 || this.generation > 10) {
+							this.tree.removeBranch(this);
+							var l = new Leaf(this.p, 10, this.color, this.tree.ctx);
+							l.render();
+						}
+					},
+
+					grow: function() {
+						this.draw();
+						this.modify();
+						this.fork();
+					},
+
+					fork: function() {
+						var p = this.length - Branch.random(100, 200); // + (this.generation * 10);
+						if(p > 0) {
+							var n = Math.round(Branch.random(1, 3));
+							this.tree.stat.fork += n - 1;
+							for(var i = 0; i < n; i++) {
+								Branch.clone(this);
+							}
+
+							this.tree.removeBranch(this);
+						}
+					}
+				};
+
+				Branch.circle = 2 * Math.PI;
+				Branch.random = function(min, max) {
+					return Math.random() * (max - min) + min;
+				};
+
+				Branch.clone = function(b) {
+					var r = new Branch(new Vector(b.p.x, b.p.y), new Vector(b.v.x, b.v.y), b.r, b.color, b.tree);
+					r.generation = b.generation + 1;
+					return r;
+				};
+
+				Branch.rgba = function(r, g, b, a) {
+					return 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
+				};
+
+				Branch.randomrgba = function(min, max, a) {
+					return Branch.rgba(Math.round(Branch.random(min, max)), Math.round(Branch.random(min, max)), Math.round(Branch.random(min, max)), a);
+				};
+
+				var Tree = function() {
+					var branches = [];
+					var timer;
+					this.stat = {
+						fork: 0,
+						length: 0
+					};
+
+					this.addBranch = function(b) {
+						branches.push(b);
+					};
+
+					this.removeBranch = function(b) {
+						for(var i = 0; i < branches.length; i++) {
+							if(branches[i] === b) {
+								branches.splice(i, 1);
+								return;
+							}
+						}
+					};
+
+					this.render = function(fn) {
+						var that = this;
+						timer = setInterval(function() {
+							fn.apply(that, arguments);
+							if(branches.length > 0) {
+								for(var i = 0; i < branches.length; i++) {
+									branches[i].grow();
+								}
+							} else {
+								//clearInterval(timer);
+							}
+						}, 1000 / 30);
+					};
+
+					this.init = function(ctx) {
+						this.ctx = ctx;
+					};
+
+					this.abort = function() {
+						branches = [];
+						this.stat = {
+							fork: 0,
+							length: 0
+						}
+					};
+				};
+
+				function init() {
+					// init
+					var $window = $(window);
+					var $body = $("body");
+					var canvas_width = $window.width();
+					var canvas_height = $window.height() - 30;
+					var center_x = canvas_width / 2;
+					var stretch_factor = 600 / canvas_height;
+					var y_speed = 3 / stretch_factor;
+					var $statMsg = $("#statMsg");
+					// tx
+
+					var canvas = $('#canvas')[0];
+					canvas.width = canvas_width;
+					canvas.height = canvas_height;
+					var ctx = canvas.getContext("2d");
+					ctx.globalCompositeOperation = "lighter";
+					// tree
+
+					var t = new Tree();
+					t.init(ctx);
+
+					for(var i = 0; i < 3; i++) {
+						new Branch(new Vector(center_x, canvas_height), new Vector(Math.random(-1, 1), -y_speed), 15 / stretch_factor, Branch.randomrgba(0, 255, 0.3), t);
+					}
+
+					t.render(function() {
+						$statMsg.html(this.stat.fork);
+					});
+				}
+
+				$(function() {
+					init();
+				});
+			})(jQuery);
+		</script>
+
+		<style type="text/css">
+			body {
+				padding: 0;
+				margin: 0;
+				background: #fff;
+				font-family: Courier;
+			}
+			
+			canvas {
+				background-color: #000;
+				cursor: pointer;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="container">
+			<div class="jumbotron">
+				<canvas id='canvas' onClick="window.location.href='bootstrap首页.html'"></canvas>
+				<!--<div id="statMsg" style="display:none;">阶段</div>-->
+			</div>
+		</div>
+	</body>
+
 </html>
